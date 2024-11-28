@@ -35,6 +35,8 @@ Route::group(['prefix'=>'/model'], function(){
 
 Route::group(['prefix'=>'/car'], function(){
     Route::get('/count/{brand}/{model}/{year}/{price}/{mileage}/{title}/{body}/{drive}/{engin}', [CarController::class,'count'])->name('car.count');
+
+    Route::middleware('auth')->post('/like/{id}', [CarController::class,'like'])->name('car.like');
 });
 
 

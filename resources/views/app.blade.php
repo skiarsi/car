@@ -18,6 +18,11 @@
 </head>
 
 <body class="font-sans antialiased bg-gray-200">
+
+    <script>
+        window.csrfToken = "{{ csrf_token() }}";
+    </script>
+
     @inertia
 </body>
 

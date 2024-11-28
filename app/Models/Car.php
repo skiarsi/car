@@ -69,8 +69,7 @@ class Car extends Model
     }
 
     // relate with user like
-    public function like() : BelongsToMany {
-        // return $this->belongsToMany(User::class)->where('user_id', auth()->user()->id);
+    public function user() : BelongsToMany {
         return $this->belongsToMany(User::class);
     }
 

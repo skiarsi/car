@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
@@ -36,7 +37,7 @@ class CarController extends Controller
                     //         $query->where('user_id', auth()->id());
                     //     }
                     ])
-                    ->with(['like'=> function($query){
+                    ->with(['user'=> function($query){
                         if (auth()->check()) {
                             $query->where('user_id', auth()->id());
                         }
@@ -59,18 +60,45 @@ class CarController extends Controller
     }
 
 
-    // get max mileage
-    public function maxmilieage($brand, $model, $year, $price, $mileage, $title, $body, $drive, $engin) {
-            return Car::
-                      ByMake($brand)
-                    ->ByModel($model)
-                    ->ByYear($year)
-                    ->ByPrice($price)
-                    ->ByMileage($mileage)
-                    ->ByTitle($title)
-                    ->ByBody($body)
-                    ->ByDrive($drive)
-                    ->ByEngine($engin)
-                    ->max('mileage');
+    /**
+     *   get max mileage
+     *
+     *
+     * I made this to make mileage slider in resualt page
+    */
+
+    // public function maxmilieage($brand, $model, $year, $price, $mileage, $title, $body, $drive, $engin) {
+    //         return Car::
+    //                   ByMake($brand)
+    //                 ->ByModel($model)
+    //                 ->ByYear($year)
+    //                 ->ByPrice($price)
+    //                 ->ByMileage($mileage)
+    //                 ->ByTitle($title)
+    //                 ->ByBody($body)
+    //                 ->ByDrive($drive)
+    //                 ->ByEngine($engin)
+    //                 ->max('mileage');
+    // }
+
+    public function like($id) {
+
+        $car = Car::findOrFail($id);
+        $user = Auth::user();
+        if($user){
+            // $findexist = $car->user()->where('car_id', $id)->where('user_id',Auth::user()->id)->count();
+            // $findexist = Car::with('user')->get();
+            // return response()->json(['message' => $findexist]);
+            if(!$car->user()->where('car_id', $id)->where('user_id',Auth::user()->id)->exists()){
+                $car->user()->attach($user->id);
+
+                return response()->json(['message' => 'Car liked successfully','carlike'=>1], 200);
+            }else{
+                $car->user()->detach($user->id);
+                return response()->json(['message' => 'user liked this before','carlike'=>0]);
+            }
+        }else{
+            return response()->json(['message' => 'user not online']);
+        }
     }
 }

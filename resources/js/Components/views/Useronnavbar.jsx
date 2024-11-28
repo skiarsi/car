@@ -25,10 +25,10 @@ export default function Useronnavbar({auth}) {
       </div>
       <div
         ref={divRef}
-        className={`w-60 flex flex-col py-5 bg-white rounded-sm shadow-sm shadow-gray-400 absolute top-8 right-0 ${(visible) ? 'block' : 'hidden'}`}>
-
-          <Link href="/setting/favs">My Favorites</Link>
-          <Link href="/setting/favs">Profile</Link>
+        className={`w-52 flex flex-col bg-white rounded-sm shadow-sm shadow-gray-400 absolute top-8 right-0 ${(visible) ? 'block' : 'hidden'}`}>
+          <Link className='py-2 px-4 text-lg hover:bg-gray-50' href={`/users/${auth.user.username}`}>{auth.user.name}</Link>
+          <Link className='py-2 px-4 text-lg hover:bg-gray-50' href="/setting/favs">My Favorites</Link>
+          <Link className='py-2 px-4 text-lg hover:bg-gray-50' href="/setting/favs">Profile</Link>
 
         </div>
     </>
